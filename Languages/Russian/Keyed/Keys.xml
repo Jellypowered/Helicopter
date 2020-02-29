@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+
+  <CommandAddFuel>Добавить топливо</CommandAddFuel>
+  <CommandAddFuelDesc>Добавить топливо в транспортный модуль</CommandAddFuelDesc>
+  <NonOilMsg>Нет доступного топлива.</NonOilMsg>
+  <AddFuelDoneMsg>Добавить {0} топлива,сейчас топлива:{1}</AddFuelDoneMsg>
+
+</LanguageData>

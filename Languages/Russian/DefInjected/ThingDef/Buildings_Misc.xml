@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Transport pods -->
+
+  <Building_Helicopter.label>транспортный модуль</Building_Helicopter.label>
+  <Building_Helicopter.description>Запускаемый суборбитальный транспортный модуль. Может перевозить людей, животных, вещи. Может использоваться для отправки подарков и транспортировки людей для атаки.</Building_Helicopter.description>
+  <Building_Helicopter_Blueprint.label>транспортный модуль (чертеж)</Building_Helicopter_Blueprint.label>
+  <Building_Helicopter_Frame.label>транспортный модуль (постройка)</Building_Helicopter_Frame.label>
+  <Building_Helicopter_Frame.description>Запускаемый суборбитальный транспортный модуль. Может перевозить людей, животных, вещи. Может использоваться для отправки подарков и транспортировки людей для атаки.</Building_Helicopter_Frame.description>
+
+
+</LanguageData>

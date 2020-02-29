@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+
+  <CommandAddFuel>添加燃料</CommandAddFuel>
+  <CommandAddFuelDesc>为复用式巨型空投仓添加燃料</CommandAddFuelDesc>
+  <NonOilMsg>没有可用的燃料.</NonOilMsg>
+  <AddFuelDoneMsg>添加了{0}燃料,复用式巨型空投仓剩余燃料:{1}</AddFuelDoneMsg>
+
+</LanguageData>

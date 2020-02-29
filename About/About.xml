@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Cargo Pod Transport[1.1]</name>
+  <author>Jellypowered</author>
+  <url>http://rimworldgame.com</url>
+  <supportedVersions><li>1.1</li></supportedVersions>
+  <packageId>jelly.CargoPodTransport</packageId>
+  <description>
+  A Simple Cargo Pod Transport MOD.
+  Updated to 1.1 by Jellypowered.
+  Original Author: AKreedz
+  </description>
+</ModMetaData>

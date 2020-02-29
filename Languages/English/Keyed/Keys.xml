@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+
+  <CommandAddFuel>Add Fuel</CommandAddFuel>
+  <CommandAddFuelDesc>Add fuel to Cargo Pod Transport</CommandAddFuelDesc>
+  <NonOilMsg>There is no available chemfuel.</NonOilMsg>
+  <AddFuelDoneMsg>Add {0} fuel,now fuel:{1}</AddFuelDoneMsg>
+
+</LanguageData>
