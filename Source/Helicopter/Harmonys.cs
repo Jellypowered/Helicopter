@@ -73,39 +73,59 @@ namespace Helicopter
                 }
             }
             tv.Field("playerCaravanAllPawnsAndItems").SetValue(newResult);
-
-
-
         }
 
     }
 
-
-
-    //helicopter incoming
-    [HarmonyPatch(typeof(DropPodUtility), "MakeDropPodAt", new Type[]
-    {
-        typeof(IntVec3), typeof(Map), typeof(ActiveDropPodInfo)
-    })]
+    //helicopter incoming, Edge Code thanks to SmashPhil and Neceros of SRTS-Expanded!
+    [HarmonyPatch(typeof(DropPodUtility), "MakeDropPodAt", new Type[] { typeof(IntVec3), typeof(Map), typeof(ActiveDropPodInfo) })]
     public static class HarmonyTest
     {
         public static bool Prefix(IntVec3 c, Map map, ActiveDropPodInfo info)
         {
-            if (info.innerContainer.Contains(ThingDef.Named("Building_Helicopter")))
+            for (int index = 0; index < info.innerContainer.Count; index++)
             {
-                ActiveDropPod activeDropPod = (ActiveDropPod)ThingMaker.MakeThing(ThingDef.Named("ActiveHelicopter"), null);
-                activeDropPod.Contents = info;
-                SkyfallerMaker.SpawnSkyfaller(ThingDef.Named("HelicopterIncoming"), activeDropPod, c, map);
-                return false;
+                if (info.innerContainer[index].TryGetComp<CompLaunchableHelicopter>() != null)
+                {
+                    Thing helicopter = info.innerContainer[index];
+                    ActiveDropPod activeDropPod = (ActiveDropPod)ThingMaker.MakeThing(ThingDef.Named("ActiveHelicopter"), null);
+                    activeDropPod.Contents = info;
+
+                    EnsureInBounds(ref c, info.innerContainer[index].def, map);
+                    SkyfallerMaker.SpawnSkyfaller(ThingDef.Named("HelicopterIncoming"), activeDropPod, c, map);
+                    return false;
+                }
             }
             return true;
-
-
         }
 
+        private static void EnsureInBounds(ref IntVec3 c, ThingDef helicopter, Map map)
+        {
+
+            int x = (int)9;
+            int y = (int)9;
+            int offset = x > y ? x : y;
+
+            if (c.x < offset)
+            {
+                c.x = offset;
+            }
+            else if (c.x >= (map.Size.x - offset))
+            {
+                c.x = (map.Size.x - offset);
+            }
+            if (c.z < offset)
+            {
+                c.z = offset;
+            }
+            else if (c.z > (map.Size.z - offset))
+            {
+                c.z = (map.Size.z - offset);
+            }
+        }
     }
 
-
+    
     //helicopter can take down and mad pawn
     [HarmonyPatch(typeof(Dialog_LoadTransporters), "AddPawnsToTransferables", new Type[]
     {
@@ -191,11 +211,6 @@ namespace Helicopter
                         masss += (pawn.inventory.innerContainer[j].def.BaseMass * pawn.inventory.innerContainer[j].stackCount);
                 }
             }
-
-
-
-
-
 
             foreach(Pawn pawn in __instance.pawns.InnerListForReading)
             {
