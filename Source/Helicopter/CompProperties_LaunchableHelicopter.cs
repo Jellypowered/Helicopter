@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Verse;
+﻿using Verse;
 
 namespace Helicopter
 {
@@ -12,5 +9,6 @@ namespace Helicopter
         {
             this.compClass = typeof(CompLaunchableHelicopter);
         }
+        public float fuelPerTile = 2.25f;
     }
 }

@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using RimWorld.Planet;
+using UnityEngine;
+using Verse;
 
 namespace Helicopter
 {
-    public class TravelingHelicopters
+    public class TravelingHelicopters : TravelingTransportPods
     {
+        public Thing flyingThing;
+
+        //private Material material;
     }
+
 }
+

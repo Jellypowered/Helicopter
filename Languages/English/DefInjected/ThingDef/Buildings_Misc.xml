@@ -5,9 +5,9 @@
 
   <Building_Helicopter.label>Cargo Pod Transport</Building_Helicopter.label>
   <Building_Helicopter.description>A launchable sub-orbital cargo pod capable of carrying people, items, or animals. Can be used for sending gifts, transporting people or supplies, surprise attacks, or reinforcing battles.</Building_Helicopter.description>
-  <Building_Helicopter_Blueprint.label>Cargo Pod Transport(Blueprint)</Building_Helicopter_Blueprint.label>
-  <Building_Helicopter_Frame.label>Cargo Pod Transport(Building)</Building_Helicopter_Frame.label>
-  <Building_Helicopter_Frame.description>A launchable sub-orbital cargo pod capable of carrying people, items, or animals. Can be used for sending gifts, transporting people or supplies, surprise attacks, or reinforcing battles.</Building_Helicopter_Frame.description>
+  <Blueprint_Building_Helicopter.label>Cargo Pod Transport(Blueprint)</Blueprint_Building_Helicopter.label>
+  <Frame_Building_Helicopter.label>Cargo Pod Transport(Building)</Frame_Building_Helicopter.label>
+  <Frame_Building_Helicopter.description>A launchable sub-orbital cargo pod capable of carrying people, items, or animals. Can be used for sending gifts, transporting people or supplies, surprise attacks, or reinforcing battles.</Frame_Building_Helicopter.description>
 
 
 </LanguageData>

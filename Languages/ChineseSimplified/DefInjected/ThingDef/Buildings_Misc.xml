@@ -5,9 +5,9 @@
 
   <Building_Helicopter.label>复用式巨型空投仓</Building_Helicopter.label>
   <Building_Helicopter.description>更大的储物空间，可以自由飞行。</Building_Helicopter.description>
-  <Building_Helicopter_Blueprint.label>复用式巨型空投仓(蓝图)</Building_Helicopter_Blueprint.label>
-  <Building_Helicopter_Frame.label>复用式巨型空投仓(建造中)</Building_Helicopter_Frame.label>
-  <Building_Helicopter_Frame.description>更大的储物空间，可以自由飞行。</Building_Helicopter_Frame.description>
+  <Blueprint_Building_Helicopter.label>复用式巨型空投仓(蓝图)</Blueprint_Building_Helicopter.label>
+  <Frame_Building_Helicopter.label>复用式巨型空投仓(建造中)</Frame_Building_Helicopter.label>
+  <Frame_Building_Helicopter.description>更大的储物空间，可以自由飞行。</Frame_Building_Helicopter.description>
 
 
 </LanguageData>
