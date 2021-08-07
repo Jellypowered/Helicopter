@@ -391,85 +391,105 @@ namespace Helicopter
 
         public void TryLaunch(int destinationTile, TransportPodsArrivalAction arrivalAction, Caravan cafr = null)
         {
+            //Log.Warning("CARR:" + this.carr+"/"+cafr);
             if (cafr == null)
                 if (!this.parent.Spawned)
                 {
                     Log.Error("Tried to launch " + this.parent + ", but it's unspawned.");
                     return;
                 }
-            if (this.parent.Spawned && !this.LoadingInProgressOrReadyToLaunch || (!this.AllInGroupConnectedToFuelingPort || !this.AllFuelingPortSourcesInGroupHaveAnyFuel))
+            /*
+            List<CompTransporter> transportersInGroup = this.TransportersInGroup;
+            if (transportersInGroup == null)
+            {
+                Log.Error("Tried to launch " + this.parent + ", but it's not in any group.", false);
                 return;
+            }
+            */
+            if (this.parent.Spawned)
+            {
+                if (!this.LoadingInProgressOrReadyToLaunch)
+                {
+                    return;
+                }
+            }
+            if (!this.AllInGroupConnectedToFuelingPort || !this.AllFuelingPortSourcesInGroupHaveAnyFuel)
+            {
+
+                return;
+            }
             if (cafr == null)
             {
                 Map map = this.parent.Map;
                 int num = Find.WorldGrid.TraversalDistanceBetween(map.Tile, destinationTile, true, int.MaxValue);
                 if (num > this.MaxLaunchDistance)
+                {
                     return;
+                }
                 this.Transporter.TryRemoveLord(map);
-                int groupId = this.Transporter.groupID;
-                float amount = Mathf.Max(CompLaunchableHelicopter.FuelNeededToLaunchAtDist((float)num, this.BaseFuelPerTile), 1f);
-                CompTransporter comp1 = this.FuelingPortSource.TryGetComp<CompTransporter>();
-                Building fuelingPortSource = this.FuelingPortSource;
+                int groupID = this.Transporter.groupID;
+                float amount = Mathf.Max(CompLaunchableHelicopter.FuelNeededToLaunchAtDist(num, 2.25f));
+                //for (int i = 0; i < transportersInGroup.Count; i++)
+
+                CompTransporter compTransporter = this.FuelingPortSource.TryGetComp<CompTransporter>();//transportersInGroup[i];
+                Building fuelingPortSource = this.FuelingPortSource;//compTransporter.Launchable.FuelingPortSource;
                 if (fuelingPortSource != null)
+                {
                     fuelingPortSource.TryGetComp<CompRefuelable>().ConsumeFuel(amount);
-                ThingOwner directlyHeldThings = comp1.GetDirectlyHeldThings();
+                }
+                ThingOwner directlyHeldThings = compTransporter.GetDirectlyHeldThings();
 
-
-                Thing helicopter = ThingMaker.MakeThing(ThingDef.Named(parent.def.defName), (ThingDef)null);
+                Thing helicopter = ThingMaker.MakeThing(ThingDef.Named("Building_Helicopter"));
                 helicopter.SetFactionDirect(Faction.OfPlayer);
-                //Thing helicopter = ThingMaker.MakeThing(ThingDef.Named("Building_Helicopter"));
-                //helicopter.SetFactionDirect(Faction.OfPlayer);
 
                 CompRefuelable compr = helicopter.TryGetComp<CompRefuelable>();
-                compr.GetType().GetField("fuel", BindingFlags.Instance | BindingFlags.NonPublic).SetValue((object)compr, (object)fuelingPortSource.TryGetComp<CompRefuelable>().Fuel);
-                compr.TargetFuelLevel = fuelingPortSource.TryGetComp<CompRefuelable>().TargetFuelLevel;
-                helicopter.stackCount = 1;
-                directlyHeldThings.TryAddOrTransfer(helicopter, true);
+                Type tcr = compr.GetType();
+                FieldInfo finfos = tcr.GetField("fuel", BindingFlags.NonPublic | BindingFlags.Instance);
+                finfos.SetValue(compr, fuelingPortSource.TryGetComp<CompRefuelable>().Fuel);
 
-                //CompRefuelable compr = helicopter.TryGetComp<CompRefuelable>();
-                //Type tcr = compr.GetType();
-                //FieldInfo finfos = tcr.GetField("fuel", BindingFlags.NonPublic | BindingFlags.Instance);
-                //finfos.SetValue(compr, fuelingPortSource.TryGetComp<CompRefuelable>().Fuel);
-                //helicopter.stackCount = 1;
-                //directlyHeldThings.TryAddOrTransfer(helicopter);
+                helicopter.stackCount = 1;
+                directlyHeldThings.TryAddOrTransfer(helicopter);
 
                 ActiveDropPod activeDropPod = (ActiveDropPod)ThingMaker.MakeThing(ThingDef.Named("ActiveHelicopter"), null);
-                // Neceros Edit
                 activeDropPod.Contents = new ActiveDropPodInfo();
-                activeDropPod.Contents.innerContainer.TryAddRangeOrTransfer((IEnumerable<Thing>)directlyHeldThings, true, true);
-
+                activeDropPod.Contents.innerContainer.TryAddRangeOrTransfer(directlyHeldThings, true, true);
                 HelicopterLeaving dropPodLeaving = (HelicopterLeaving)SkyfallerMaker.MakeSkyfaller(ThingDef.Named("HelicopterLeaving"), activeDropPod);
-                dropPodLeaving.groupID = groupId;
+                dropPodLeaving.groupID = groupID;
                 dropPodLeaving.destinationTile = destinationTile;
                 dropPodLeaving.arrivalAction = arrivalAction;
-
-                comp1.CleanUpLoadingVars(map);
-                IntVec3 position = fuelingPortSource.Position;
+                compTransporter.CleanUpLoadingVars(map);
+                //compTransporter.parent
+                IntVec3 poc = fuelingPortSource.Position;
+                // fuelingPortSource.Destroy(DestroyMode.Vanish);
                 HelicopterStatic.HelicopterDestroy(fuelingPortSource, DestroyMode.Vanish);
-                GenSpawn.Spawn(dropPodLeaving, position, map, WipeMode.Vanish);
-                CameraJumper.TryHideWorld();
+                GenSpawn.Spawn(dropPodLeaving, poc, map, WipeMode.Vanish);
 
+                CameraJumper.TryHideWorld();
             }
             else
             {
-                int num = Find.WorldGrid.TraversalDistanceBetween(this.carr.Tile, destinationTile, true, int.MaxValue);
+                int num = Find.WorldGrid.TraversalDistanceBetween(carr.Tile, destinationTile, true, int.MaxValue);
                 if (num > this.MaxLaunchDistance)
+                {
                     return;
-                float amount = Mathf.Max(CompLaunchableHelicopter.FuelNeededToLaunchAtDist((float)num, this.BaseFuelPerTile), 1f);
-                if (this.FuelingPortSource != null)
-                    this.FuelingPortSource.TryGetComp<CompRefuelable>().ConsumeFuel(amount);
+                }
+                float amount = Mathf.Max(CompLaunchableHelicopter.FuelNeededToLaunchAtDist((float)num, BaseFuelPerTile), 1f);
+                if (FuelingPortSource != null)
+                    FuelingPortSource.TryGetComp<CompRefuelable>().ConsumeFuel(amount);
+
+
                 ThingOwner<Pawn> directlyHeldThings = (ThingOwner<Pawn>)cafr.GetDirectlyHeldThings();
-                Thing thing = null;
+                Thing helicopter = null;
                 foreach (Pawn pawn in directlyHeldThings.InnerListForReading)
                 {
-                    Pawn_InventoryTracker inventory = pawn.inventory;
-                    for (int index = 0; index < inventory.innerContainer.Count; ++index)
+                    Pawn_InventoryTracker pinv = pawn.inventory;
+                    for (int i = 0; i < pinv.innerContainer.Count; i++)
                     {
-                        // Neceros Edit
-                        if (inventory.innerContainer[index].TryGetComp<CompLaunchableHelicopter>() != null)
+                        if (pinv.innerContainer[i].def.defName == ("Building_Helicopter"))
                         {
-                            thing = inventory.innerContainer[index];
-                            inventory.innerContainer[index].holdingOwner.Remove(inventory.innerContainer[index]);
+                            helicopter = pinv.innerContainer[i];
+                            pinv.innerContainer[i].holdingOwner.Remove(pinv.innerContainer[i]);
+
                             break;
                         }
                     }
@@ -485,33 +505,34 @@ namespace Helicopter
                 ThingOwner<Thing> thingOwner = new ThingOwner<Thing>();
                 foreach (Pawn pawn in directlyHeldThings.AsEnumerable<Pawn>().ToList<Pawn>())
                     thingOwner.TryAddOrTransfer((Thing)pawn, true);
-                if (thing != null && thing.holdingOwner == null)
-                    thingOwner.TryAddOrTransfer(thing, false);
+                if (helicopter != null && helicopter.holdingOwner == null)
+                    thingOwner.TryAddOrTransfer(helicopter, canMergeWithExistingStacks: false);
 
                 // Neceros Edit
-                ActiveDropPod activeDropPod = (ActiveDropPod)ThingMaker.MakeThing(ThingDef.Named(parent.def.defName + "ActiveHelicopter"), (ThingDef)null);
+                ActiveDropPod activeDropPod = (ActiveDropPod)ThingMaker.MakeThing(ThingDef.Named("ActiveHelicopter"), null);
                 activeDropPod.Contents = new ActiveDropPodInfo();
                 activeDropPod.Contents.innerContainer.TryAddRangeOrTransfer((IEnumerable<Thing>)thingOwner, true, true);
                 activeDropPod.Contents.innerContainer.TryAddRangeOrTransfer((IEnumerable<Thing>)thingsInsideShip, true, true);
                 thingsInsideShip.Clear();
 
                 cafr.RemoveAllPawns();
-                if (!cafr.Destroyed)
-                    cafr.Destroy();
-                TravelingHelicopters travelingTransportPods = (TravelingHelicopters)WorldObjectMaker.MakeWorldObject(DefDatabase<WorldObjectDef>.GetNamed("TravelingHelicopters", true));
+                if (cafr.Spawned)
+                {
+                    Find.WorldObjects.Remove(cafr);
+                }
+                TravelingTransportPods travelingTransportPods = (TravelingTransportPods)WorldObjectMaker.MakeWorldObject(DefDatabase<WorldObjectDef>.GetNamed("TravelingHelicopters", true));
                 travelingTransportPods.Tile = cafr.Tile;
                 travelingTransportPods.SetFaction(Faction.OfPlayer);
                 travelingTransportPods.destinationTile = destinationTile;
                 travelingTransportPods.arrivalAction = arrivalAction;
-                travelingTransportPods.flyingThing = this.parent;
-                Find.WorldObjects.Add((WorldObject)travelingTransportPods);
+                Find.WorldObjects.Add(travelingTransportPods);
                 travelingTransportPods.AddPod(activeDropPod.Contents, true);
-                activeDropPod.Contents = (ActiveDropPodInfo)null;
+                activeDropPod.Contents = null;
                 activeDropPod.Destroy(DestroyMode.Vanish);
-                //Log.Message("Let's try to follow the pod?");
-                CameraJumper.TryHideWorld();
+                // CameraJumper.TryHideWorld();
                 Find.WorldTargeter.StopTargeting();
             }
+
         }
 
 
