@@ -19,6 +19,7 @@ namespace Helicopter
         public float BaseFuelPerTile => 2.25f;
 
         public CompProperties_LaunchableHelicopter HelicopterProps => (CompProperties_LaunchableHelicopter)this.props;
+
         public Building FuelingPortSource
         {
             get
@@ -77,6 +78,7 @@ namespace Helicopter
                     };
             }
         }
+
         public bool AnyInGroupHasAnythingLeftToLoad
         {
             get
@@ -106,6 +108,7 @@ namespace Helicopter
                 return false;
             }
         }
+
         public CompTransporter Transporter
         {
             get
@@ -115,7 +118,6 @@ namespace Helicopter
                 return this.cachedCompTransporter;
             }
         }
-
 
         public float FuelingPortSourceFuel
         {
@@ -178,6 +180,7 @@ namespace Helicopter
                 return CompLaunchableHelicopter.MaxLaunchDistanceAtFuelLevel(this.FuelInLeastFueledFuelingPortSource);
             }
         }
+
         public int MaxLaunchDistanceEverPossible
         {
             get
@@ -214,6 +217,7 @@ namespace Helicopter
         {
             thingsInsideShip.Add(thing);
         }
+
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
             foreach (Gizmo gizmo in base.CompGetGizmosExtra())
@@ -268,7 +272,6 @@ namespace Helicopter
                 return "NotReadyForLaunch".Translate() + ": " + "TransportPodInGroupHasSomethingLeftToLoad".Translate() + ".";
             return "ReadyForLaunch".Translate();
         }
-
 
         private void StartChoosingDestination()
         {
@@ -391,21 +394,14 @@ namespace Helicopter
 
         public void TryLaunch(int destinationTile, TransportPodsArrivalAction arrivalAction, Caravan cafr = null)
         {
-            //Log.Warning("CARR:" + this.carr+"/"+cafr);
+
             if (cafr == null)
                 if (!this.parent.Spawned)
                 {
                     Log.Error("Tried to launch " + this.parent + ", but it's unspawned.");
                     return;
                 }
-            /*
-            List<CompTransporter> transportersInGroup = this.TransportersInGroup;
-            if (transportersInGroup == null)
-            {
-                Log.Error("Tried to launch " + this.parent + ", but it's not in any group.", false);
-                return;
-            }
-            */
+           
             if (this.parent.Spawned)
             {
                 if (!this.LoadingInProgressOrReadyToLaunch)
@@ -415,7 +411,6 @@ namespace Helicopter
             }
             if (!this.AllInGroupConnectedToFuelingPort || !this.AllFuelingPortSourcesInGroupHaveAnyFuel)
             {
-
                 return;
             }
             if (cafr == null)
@@ -429,10 +424,9 @@ namespace Helicopter
                 this.Transporter.TryRemoveLord(map);
                 int groupID = this.Transporter.groupID;
                 float amount = Mathf.Max(CompLaunchableHelicopter.FuelNeededToLaunchAtDist(num, 2.25f));
-                //for (int i = 0; i < transportersInGroup.Count; i++)
-
-                CompTransporter compTransporter = this.FuelingPortSource.TryGetComp<CompTransporter>();//transportersInGroup[i];
-                Building fuelingPortSource = this.FuelingPortSource;//compTransporter.Launchable.FuelingPortSource;
+                
+                CompTransporter compTransporter = this.FuelingPortSource.TryGetComp<CompTransporter>();
+                Building fuelingPortSource = this.FuelingPortSource;
                 if (fuelingPortSource != null)
                 {
                     fuelingPortSource.TryGetComp<CompRefuelable>().ConsumeFuel(amount);
@@ -458,9 +452,7 @@ namespace Helicopter
                 dropPodLeaving.destinationTile = destinationTile;
                 dropPodLeaving.arrivalAction = arrivalAction;
                 compTransporter.CleanUpLoadingVars(map);
-                //compTransporter.parent
                 IntVec3 poc = fuelingPortSource.Position;
-                // fuelingPortSource.Destroy(DestroyMode.Vanish);
                 HelicopterStatic.HelicopterDestroy(fuelingPortSource, DestroyMode.Vanish);
                 GenSpawn.Spawn(dropPodLeaving, poc, map, WipeMode.Vanish);
 
@@ -476,7 +468,6 @@ namespace Helicopter
                 float amount = Mathf.Max(CompLaunchableHelicopter.FuelNeededToLaunchAtDist((float)num, BaseFuelPerTile), 1f);
                 if (FuelingPortSource != null)
                     FuelingPortSource.TryGetComp<CompRefuelable>().ConsumeFuel(amount);
-
 
                 ThingOwner<Pawn> directlyHeldThings = (ThingOwner<Pawn>)cafr.GetDirectlyHeldThings();
                 Thing helicopter = null;
@@ -529,12 +520,9 @@ namespace Helicopter
                 travelingTransportPods.AddPod(activeDropPod.Contents, true);
                 activeDropPod.Contents = null;
                 activeDropPod.Destroy(DestroyMode.Vanish);
-                // CameraJumper.TryHideWorld();
                 Find.WorldTargeter.StopTargeting();
             }
-
         }
-
 
         public void Notify_FuelingPortSourceDeSpawned()
         {
@@ -546,7 +534,6 @@ namespace Helicopter
 
         public static int MaxLaunchDistanceAtFuelLevel(float fuelLevel, float costPerTile)
         {
-
             return Mathf.FloorToInt(fuelLevel / costPerTile);
         }
 
@@ -554,9 +541,6 @@ namespace Helicopter
         {
             return cost * dist;
         }
-
-
-
 
         public IEnumerable<FloatMenuOption> GetTransportPodsFloatMenuOptionsAt(int tile, Caravan car = null)
         {
@@ -613,9 +597,6 @@ namespace Helicopter
                     (() => TryLaunch(tile, (TransportPodsArrivalAction)null)));
         }
 
-        List<Thing> thingsInsideShip = new List<Thing>();
+        private List<Thing> thingsInsideShip = new List<Thing>();
     }
 }
-
-
-

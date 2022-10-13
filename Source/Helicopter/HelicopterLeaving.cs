@@ -13,6 +13,7 @@ namespace Helicopter
         public int destinationTile = -1;
         public TransportPodsArrivalAction arrivalAction;
         private bool alreadyLeft;
+
         public ActiveDropPodInfo Contents
         {
             get

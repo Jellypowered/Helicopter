@@ -9,7 +9,6 @@ namespace Helicopter
 {
     public static class HelicoptersArrivalActionUtility
     {
-
         public static IEnumerable<FloatMenuOption> GetFloatMenuOptions<T>(Func<FloatMenuAcceptanceReport> acceptanceReportGetter, Func<T> arrivalActionGetter, string label, CompLaunchableHelicopter representative, int destinationTile, Caravan car) where T : TransportPodsArrivalAction
         {
             FloatMenuAcceptanceReport rep = acceptanceReportGetter();
@@ -18,7 +17,6 @@ namespace Helicopter
             {
                 if (!rep.FailReason.NullOrEmpty())
                     yield return new FloatMenuOption(label + " (" + rep.FailReason + ")", null);
-                //, MenuOptionPriority.Default, null, null, 0f, null, null);
                 else
                     yield return new FloatMenuOption(label, (Action)(() =>
                     {
@@ -34,11 +32,8 @@ namespace Helicopter
                             Messages.Message(acceptanceReport.FailMessage, (LookTargets)new GlobalTargetInfo(destinationTile), MessageTypeDefOf.RejectInput, false);
                         }
                     }));
-
             }
-
         }
-
 
         public static IEnumerable<FloatMenuOption> GetATKFloatMenuOptions(CompLaunchableHelicopter representative, IEnumerable<IThingHolder> pods, Settlement settlement, Caravan car)
         {

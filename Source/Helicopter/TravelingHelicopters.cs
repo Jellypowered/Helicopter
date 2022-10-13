@@ -1,5 +1,4 @@
 ﻿using RimWorld.Planet;
-using UnityEngine;
 using Verse;
 
 namespace Helicopter
@@ -10,6 +9,4 @@ namespace Helicopter
 
         //private Material material;
     }
-
 }
-

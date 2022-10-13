@@ -9,6 +9,7 @@ namespace Helicopter
         {
             this.compClass = typeof(CompLaunchableHelicopter);
         }
+
         public float fuelPerTile = 2.25f;
     }
 }

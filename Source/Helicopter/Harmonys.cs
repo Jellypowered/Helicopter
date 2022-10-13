@@ -10,7 +10,6 @@ using Verse;
 
 namespace Helicopter
 {
-
     //helicopter direct place
     [HarmonyPatch(typeof(ActiveDropPod), "PodOpen", new Type[] { })]
     public static class HarmonyTest_dp
@@ -28,21 +27,15 @@ namespace Helicopter
                 }
             }
         }
-
     }
-
 }
-
-
 
 //helicopter's mass will not appear in trade window
 [HarmonyPatch(typeof(Dialog_Trade), "SetupPlayerCaravanVariables", new Type[]
 {
-
 })]
 public static class HarmonyTest_trade
 {
-
     public static void Postfix(Dialog_Trade __instance)
     {
         Traverse tv = Traverse.Create(__instance);
@@ -52,7 +45,6 @@ public static class HarmonyTest_trade
 
         for (int i = 0; i < contents.Count; i++)
         {
-
             if (contents[i].def.defName != "Building_Helicopter")
             {
                 newResult.Add(contents[i]);
@@ -60,7 +52,6 @@ public static class HarmonyTest_trade
         }
         tv.Field("playerCaravanAllPawnsAndItems").SetValue(newResult);
     }
-
 }
 
 //helicopter incoming, Edge Code thanks to SmashPhil and Neceros of SRTS-Expanded!
@@ -115,11 +106,9 @@ public static class HarmonyTest
     }
 }
 
-
 //helicopter can take down and mad pawn
 [HarmonyPatch(typeof(Dialog_LoadTransporters), "AddPawnsToTransferables", new Type[]
 {
-
 })]
 public static class HarmonyTest_C
 {
@@ -144,13 +133,11 @@ public static class HarmonyTest_C
             }
         }
         return true;
-
-
     }
-
 }
 
 /* Akreedz original patch */
+
 [HarmonyPatch(typeof(TransportPodsArrivalAction_LandInSpecificCell), "Arrived", new System.Type[] { typeof(List<ActiveDropPodInfo>), typeof(int) })]
 public static class HarmonyTest_AJ
 {
@@ -180,10 +167,10 @@ public static class HarmonyTest_AJ
         return true;
     }
 }
+
 //caravan gizmo
 [HarmonyPatch(typeof(Caravan), "GetGizmos", new Type[]
 {
-
 })]
 public static class HarmonyTest_BB
 {
@@ -192,12 +179,11 @@ public static class HarmonyTest_BB
         float masss = 0;
         foreach (Pawn pawn in __instance.pawns.InnerListForReading)
         {
-
             for (int j = 0; j < pawn.inventory.innerContainer.Count; j++)
             {
                 if (pawn.inventory.innerContainer[j].def.defName != "Building_Helicopter")
                     masss += pawn.inventory.innerContainer[j].def.BaseMass * pawn.inventory.innerContainer[j].stackCount;
-                }
+            }
         }
 
         foreach (Pawn pawn in __instance.pawns.InnerListForReading)
@@ -241,7 +227,6 @@ public static class HarmonyTest_BB
                             _ = pinv.innerContainer.Count;
                             for (int j = 0; j < list.Count; j++)
                             {
-
                                 if (list[j].def == ThingDefOf.Chemfuel)
                                 {
                                     fcont = list[j].stackCount;
@@ -257,8 +242,6 @@ public static class HarmonyTest_BB
                                         fcont = (int)need;
                                     }
 
-
-
                                     // Log.Warning("f&n is "+fcont+"/"+need);
                                     if (list[j].stackCount * 1f <= fcont)
                                     {
@@ -271,16 +254,13 @@ public static class HarmonyTest_BB
                                     {
                                         if (fcont != 0)
                                             list[j].SplitOff(fcont).Destroy(DestroyMode.Vanish);
-
                                     }
-
 
                                     Type crtype = comprf.GetType();
                                     FieldInfo finfo = crtype.GetField("fuel", BindingFlags.NonPublic | BindingFlags.Instance);
                                     finfo.SetValue(comprf, comprf.Fuel + fcont);
                                     hasAddFuel = true;
                                     break;
-
                                 }
                             }
                             if (hasAddFuel)
@@ -291,7 +271,6 @@ public static class HarmonyTest_BB
                             {
                                 Messages.Message("NonOilMsg".Translate(), MessageTypeDefOf.RejectInput, false);
                             }
-
                         }
                     };
 
@@ -302,9 +281,7 @@ public static class HarmonyTest_BB
                         nowFuel = pinv.innerContainer[i].TryGetComp<CompRefuelable>().Fuel,
                         maxFuel = pinv.innerContainer[i].TryGetComp<CompRefuelable>().Props.fuelCapacity,
                         compLabel = pinv.innerContainer[i].TryGetComp<CompRefuelable>().Props.FuelGizmoLabel
-
                     };
-
 
                     newr.Add(fuelStat);
 
@@ -312,10 +289,6 @@ public static class HarmonyTest_BB
                     return;
                 }
             }
-
         }
-
-
     }
-
 }

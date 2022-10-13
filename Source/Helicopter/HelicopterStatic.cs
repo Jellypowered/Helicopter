@@ -10,10 +10,8 @@ namespace Helicopter
 {
     public static class HelicopterStatic
     {
-
         public static IEnumerable<FloatMenuOption> GetFM(WorldObject wobj, IEnumerable<IThingHolder> ih, CompLaunchableHelicopter comp, Caravan car)
         {
-
             if (wobj is Caravan)
             {
                 return Enumerable.Empty<FloatMenuOption>();
@@ -21,7 +19,6 @@ namespace Helicopter
             else if (wobj is Site)
             {
                 return GetSite(wobj as Site, ih, comp, car);
-
             }
             else if (wobj is Settlement)
             {
@@ -33,10 +30,7 @@ namespace Helicopter
             }
 
             return Enumerable.Empty<FloatMenuOption>();
-
         }
-
-
 
         public static IEnumerable<FloatMenuOption> GetMapParent(MapParent mapparent, IEnumerable<IThingHolder> pods, CompLaunchableHelicopter representative, Caravan car)
         {
@@ -51,7 +45,6 @@ namespace Helicopter
             {
                 yield return new FloatMenuOption("LandInExistingMap".Translate(mapparent.Label), delegate
                 {
-
                     Map myMap;
                     if (car == null)
                         myMap = representative.parent.Map;
@@ -66,12 +59,10 @@ namespace Helicopter
                         representative.TryLaunch(mapparent.Tile, new TransportPodsArrivalAction_LandInSpecificCell(mapparent, x.Cell), car);
                     }, null, delegate
                     {
-
                         if (myMap != null && Find.Maps.Contains(myMap))
                         {
                             Current.Game.CurrentMap = myMap;
                         }
-
                     }, CompLaunchable.TargeterMouseAttachment);
                 }, MenuOptionPriority.Default, null, null, 0f, null, null);
             }
@@ -149,8 +140,6 @@ namespace Helicopter
             FieldInfo finfo = typ.GetField("mapIndexOrState", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             SByte sbt = -2;
             finfo.SetValue(thing, sbt);
-
-
 
             if (thing.def.DiscardOnDestroyed)
             {
