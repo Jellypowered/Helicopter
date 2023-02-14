@@ -36,6 +36,7 @@
     <Compile Include="CompLaunchableHelicopter.cs" />
     <Compile Include="CompProperties_LaunchableHelicopter.cs" />
     <Compile Include="Gizmo_MapRefuelableFuelStatus.cs" />
+    <Compile Include="HarmonyBoot.cs" />
     <Compile Include="Harmonys.cs" />
     <Compile Include="HelicopterLeaving.cs" />
     <Compile Include="HelicoptersArrivalActionUtility.cs" />
